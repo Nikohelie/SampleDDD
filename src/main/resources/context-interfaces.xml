@@ -3,21 +3,20 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:task="http://www.springframework.org/schema/task"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xsi:schemaLocation="http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
                            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+                           http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
 
+    <context:component-scan base-package="se.citerus.dddsample.interfaces"/>
 
     <!-- Handling report web service -->
 
     <jaxws:endpoint id="jax-ws.http" implementor="#handlingReportService" address="/RegisterEvent"/>
-
-    <bean id="handlingReportService" class="se.citerus.dddsample.interfaces.handling.ws.HandlingReportServiceImpl">
-        <property name="applicationEvents" ref="applicationEvents"/>
-    </bean>
 
 
     <!-- File upload directory scanner -->
@@ -34,10 +33,7 @@
         <property name="applicationEvents" ref="applicationEvents"/>
     </bean>
 
-    <bean id="handlingReportConsumptionSupport" class="se.citerus.dddsample.interfaces.handling.HandlingReportParser"/>
-
     <!-- RMI exposed booking service facade, which operates in an open Hibernate session -->
-
 
     <bean id="hibernateInterceptor" class="org.springframework.orm.hibernate4.support.OpenSessionInterceptor">
         <property name="sessionFactory" ref="sessionFactory"/>
@@ -52,20 +48,11 @@
         </property>
     </bean>
 
-    <bean id="bookingServiceFacadeTarget"
-          class="se.citerus.dddsample.interfaces.booking.facade.internal.BookingServiceFacadeImpl">
-        <property name="bookingService" ref="bookingService"/>
-        <property name="cargoRepository" ref="cargoRepository"/>
-        <property name="locationRepository" ref="locationRepository"/>
-        <property name="voyageRepository" ref="voyageRepository"/>
-    </bean>
-
     <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
         <property name="serviceInterface" value="se.citerus.dddsample.interfaces.booking.facade.BookingServiceFacade"/>
         <property name="service" ref="bookingServiceFacade"/>
         <property name="serviceName" value="BookingService"/>
     </bean>
-
 
     <!-- Tracking web application support -->
 

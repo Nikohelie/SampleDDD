@@ -1,6 +1,8 @@
 package se.citerus.dddsample.interfaces.booking.facade.internal;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import se.citerus.dddsample.application.BookingService;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
@@ -30,6 +32,7 @@ import java.util.List;
  * analogous to the view rendering for web interfaces.
  *
  */
+@Service
 public class BookingServiceFacadeImpl implements BookingServiceFacade {
 
   private BookingService bookingService;
@@ -99,18 +102,22 @@ public class BookingServiceFacadeImpl implements BookingServiceFacade {
     return routeCandidates;
   }
 
+  @Autowired
   public void setBookingService(BookingService bookingService) {
     this.bookingService = bookingService;
   }
 
+  @Autowired
   public void setLocationRepository(LocationRepository locationRepository) {
     this.locationRepository = locationRepository;
   }
 
+  @Autowired
   public void setCargoRepository(CargoRepository cargoRepository) {
     this.cargoRepository = cargoRepository;
   }
 
+  @Autowired
   public void setVoyageRepository(VoyageRepository voyageRepository) {
     this.voyageRepository = voyageRepository;
   }

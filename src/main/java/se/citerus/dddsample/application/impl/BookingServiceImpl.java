@@ -2,6 +2,8 @@ package se.citerus.dddsample.application.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.citerus.dddsample.application.BookingService;
 import se.citerus.dddsample.domain.model.cargo.*;
@@ -14,6 +16,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public final class BookingServiceImpl implements BookingService {
 
   private final CargoRepository cargoRepository;
@@ -21,6 +24,7 @@ public final class BookingServiceImpl implements BookingService {
   private final RoutingService routingService;
   private final Log logger = LogFactory.getLog(getClass());
 
+  @Autowired
   public BookingServiceImpl(final CargoRepository cargoRepository,
                             final LocationRepository locationRepository,
                             final RoutingService routingService) {

@@ -2,12 +2,11 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
-  <bean id="handlingEventFactory" class="se.citerus.dddsample.domain.model.handling.HandlingEventFactory">
-    <constructor-arg ref="cargoRepository"/>
-    <constructor-arg ref="voyageRepository"/>
-    <constructor-arg ref="locationRepository"/>
-  </bean>
+    <context:component-scan base-package="se.citerus.dddsample.domain"/>
 
 </beans>

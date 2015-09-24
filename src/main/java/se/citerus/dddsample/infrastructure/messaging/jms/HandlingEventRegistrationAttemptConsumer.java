@@ -2,6 +2,8 @@ package se.citerus.dddsample.infrastructure.messaging.jms;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import se.citerus.dddsample.application.HandlingEventService;
 import se.citerus.dddsample.interfaces.handling.HandlingEventRegistrationAttempt;
 
@@ -14,6 +16,7 @@ import javax.jms.ObjectMessage;
  * proper registration.
  * 
  */
+@Component
 public class HandlingEventRegistrationAttemptConsumer implements MessageListener {
 
   private HandlingEventService handlingEventService;
@@ -36,6 +39,7 @@ public class HandlingEventRegistrationAttemptConsumer implements MessageListener
     }
   }
 
+  @Autowired
   public void setHandlingEventService(HandlingEventService handlingEventService) {
     this.handlingEventService = handlingEventService;
   }

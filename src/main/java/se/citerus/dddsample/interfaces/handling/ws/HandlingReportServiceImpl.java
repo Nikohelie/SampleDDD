@@ -6,6 +6,7 @@ import com.aggregator.HandlingReportErrors_Exception;
 import com.aggregator.HandlingReportService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
@@ -60,6 +61,7 @@ public class HandlingReportServiceImpl implements HandlingReportService {
 
   }
 
+  @Autowired
   public void setApplicationEvents(ApplicationEvents applicationEvents) {
     this.applicationEvents = applicationEvents;
   }

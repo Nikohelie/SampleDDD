@@ -5,6 +5,8 @@ import com.pathfinder.api.TransitEdge;
 import com.pathfinder.api.TransitPath;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import se.citerus.dddsample.domain.model.cargo.Itinerary;
 import se.citerus.dddsample.domain.model.cargo.Leg;
 import se.citerus.dddsample.domain.model.cargo.RouteSpecification;
@@ -27,6 +29,7 @@ import java.util.Properties;
  * by the routing team, which operates in a different context from us.
  *
  */
+@Service
 public class ExternalRoutingService implements RoutingService {
 
   private GraphTraversalService graphTraversalService;
@@ -91,14 +94,17 @@ public class ExternalRoutingService implements RoutingService {
     );
   }
 
+  @Autowired
   public void setGraphTraversalService(GraphTraversalService graphTraversalService) {
     this.graphTraversalService = graphTraversalService;
   }
 
+  @Autowired
   public void setLocationRepository(LocationRepository locationRepository) {
     this.locationRepository = locationRepository;
   }
 
+  @Autowired
   public void setVoyageRepository(VoyageRepository voyageRepository) {
     this.voyageRepository = voyageRepository;
   }

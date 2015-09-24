@@ -4,9 +4,11 @@
        xmlns:jms="http://www.springframework.org/schema/jms"
        xmlns:amq="http://activemq.apache.org/schema/core"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-        http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-2.5.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-4.2.xsd
         http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
 
   <!-- JMS messaging -->
@@ -31,23 +33,6 @@
     <property name="connectionFactory" ref="jmsConnectionFactory"/>
   </bean>
 
-  <bean id="applicationEvents" class="se.citerus.dddsample.infrastructure.messaging.jms.JmsApplicationEventsImpl">
-    <property name="jmsOperations" ref="jmsOperations"/>
-    <property name="cargoHandledQueue" ref="cargoHandledQueue"/>
-    <property name="misdirectedCargoQueue" ref="misdirectedCargoQueue"/>
-    <property name="deliveredCargoQueue" ref="deliveredCargoQueue"/>
-    <property name="rejectedRegistrationAttemptsQueue" ref="rejectedRegistrationAttemptsQueue"/>
-    <property name="handlingEventQueue" ref="handlingEventRegistrationAttemptQueue"/>
-  </bean>
-
-  <bean id="cargoHandledConsumer" class="se.citerus.dddsample.infrastructure.messaging.jms.CargoHandledConsumer">
-    <property name="cargoInspectionService" ref="cargoInspectionService"/>
-  </bean>
-
-  <bean id="handlingEventRegistrationAttemptConsumer" class="se.citerus.dddsample.infrastructure.messaging.jms.HandlingEventRegistrationAttemptConsumer">
-    <property name="handlingEventService" ref="handlingEventService"/>
-  </bean>
-
-  <bean id="simpleLoggingConsumer" class="se.citerus.dddsample.infrastructure.messaging.jms.SimpleLoggingConsumer"/>
+  <context:component-scan base-package="se.citerus.dddsample.infrastructure.messaging.jms"/>
 
 </beans>

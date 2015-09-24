@@ -1,5 +1,7 @@
 package se.citerus.dddsample.domain.model.handling;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.cargo.CargoRepository;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
@@ -15,12 +17,14 @@ import java.util.Date;
 /**
  * Creates handling events.
  */
+@Component
 public class HandlingEventFactory {
 
   private final CargoRepository cargoRepository;
   private final VoyageRepository voyageRepository;
   private final LocationRepository locationRepository;
 
+  @Autowired
   public HandlingEventFactory(final CargoRepository cargoRepository,
                               final VoyageRepository voyageRepository,
                               final LocationRepository locationRepository) {

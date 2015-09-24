@@ -2,18 +2,17 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
   <import resource="context-infrastructure-persistence.xml"/>
   <import resource="context-infrastructure-messaging.xml"/>
 
   <!-- External graph traversal routing service  -->
 
-  <bean id="routingService" class="se.citerus.dddsample.infrastructure.routing.ExternalRoutingService">
-    <property name="graphTraversalService" ref="internalGraphTraversalService"/>
-    <property name="locationRepository" ref="locationRepository"/>
-    <property name="voyageRepository" ref="voyageRepository"/>
-  </bean>
+  <context:component-scan base-package="se.citerus.dddsample.infrastructure.routing"/>
 
   <bean id="graphTraversalService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
     <property name="serviceUrl" value="rmi://localhost:1099/PathFinder"/>

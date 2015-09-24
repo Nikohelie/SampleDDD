@@ -2,6 +2,8 @@ package se.citerus.dddsample.infrastructure.messaging.jms;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import se.citerus.dddsample.application.CargoInspectionService;
 import se.citerus.dddsample.domain.model.cargo.TrackingId;
 
@@ -16,6 +18,7 @@ import javax.jms.TextMessage;
  * This is a programmatic hook into the JMS infrastructure to
  * make cargo inspection message-driven.
  */
+@Component
 public class CargoHandledConsumer implements MessageListener {
 
   private CargoInspectionService cargoInspectionService;
@@ -33,6 +36,7 @@ public class CargoHandledConsumer implements MessageListener {
     }
   }
 
+  @Autowired
   public void setCargoInspectionService(CargoInspectionService cargoInspectionService) {
     this.cargoInspectionService = cargoInspectionService;
   }

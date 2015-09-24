@@ -2,6 +2,8 @@ package se.citerus.dddsample.application.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.HandlingEventService;
@@ -15,6 +17,7 @@ import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
 
 import java.util.Date;
 
+@Service
 public final class HandlingEventServiceImpl implements HandlingEventService {
 
   private final ApplicationEvents applicationEvents;
@@ -22,6 +25,7 @@ public final class HandlingEventServiceImpl implements HandlingEventService {
   private final HandlingEventFactory handlingEventFactory;
   private final Log logger = LogFactory.getLog(HandlingEventServiceImpl.class);
 
+  @Autowired
   public HandlingEventServiceImpl(final HandlingEventRepository handlingEventRepository,
                                   final ApplicationEvents applicationEvents,
                                   final HandlingEventFactory handlingEventFactory) {

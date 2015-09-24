@@ -2,6 +2,7 @@ package se.citerus.dddsample.infrastructure.persistence.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 /**
@@ -12,6 +13,7 @@ public abstract class HibernateRepository {
   private SessionFactory sessionFactory;
 
   @Required
+  @Autowired
   public void setSessionFactory(final SessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }

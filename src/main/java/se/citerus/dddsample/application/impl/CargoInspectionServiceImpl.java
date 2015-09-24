@@ -3,6 +3,8 @@ package se.citerus.dddsample.application.impl;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.citerus.dddsample.application.ApplicationEvents;
 import se.citerus.dddsample.application.CargoInspectionService;
@@ -12,6 +14,7 @@ import se.citerus.dddsample.domain.model.cargo.TrackingId;
 import se.citerus.dddsample.domain.model.handling.HandlingEventRepository;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 
+@Service
 public class CargoInspectionServiceImpl implements CargoInspectionService {
 
   private final ApplicationEvents applicationEvents;
@@ -19,6 +22,7 @@ public class CargoInspectionServiceImpl implements CargoInspectionService {
   private final HandlingEventRepository handlingEventRepository;
   private final Log logger = LogFactory.getLog(getClass());
 
+  @Autowired
   public CargoInspectionServiceImpl(final ApplicationEvents applicationEvents,
                                     final CargoRepository cargoRepository,
                                     final HandlingEventRepository handlingEventRepository) {

@@ -36,9 +36,7 @@ public final class BookingServiceImpl implements BookingService {
                                  final Date arrivalDeadline) {
     // TODO modeling this as a cargo factory might be suitable
     final TrackingId trackingId = cargoRepository.nextTrackingId();
-    final Location origin = locationRepository.find(originUnLocode);
-    final Location destination = locationRepository.find(destinationUnLocode);
-    final RouteSpecification routeSpecification = new RouteSpecification(origin, destination, arrivalDeadline);
+    final RouteSpecification routeSpecification = new RouteSpecification(originUnLocode, destinationUnLocode, arrivalDeadline);
 
     final Cargo cargo = new Cargo(trackingId, routeSpecification);
 
@@ -78,10 +76,9 @@ public final class BookingServiceImpl implements BookingService {
   @Transactional
   public void changeDestination(final TrackingId trackingId, final UnLocode unLocode) {
     final Cargo cargo = cargoRepository.find(trackingId);
-    final Location newDestination = locationRepository.find(unLocode);
 
     final RouteSpecification routeSpecification = new RouteSpecification(
-      cargo.origin(), newDestination, cargo.routeSpecification().arrivalDeadline()
+      cargo.origin(), unLocode, cargo.routeSpecification().arrivalDeadline()
     );
     cargo.specifyNewRoute(routeSpecification);
 

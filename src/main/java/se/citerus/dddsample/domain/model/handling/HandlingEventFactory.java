@@ -45,13 +45,12 @@ public class HandlingEventFactory {
     throws CannotCreateHandlingEventException {
     final Cargo cargo = findCargo(trackingId);
     final Voyage voyage = findVoyage(voyageNumber);
-    final Location location = findLocation(unlocode);
 
     try {
       if (voyage == null) {
-        return new HandlingEvent(cargo, completionTime, registrationTime, type, location);
+        return new HandlingEvent(cargo, completionTime, registrationTime, type, unlocode);
       } else {
-        return new HandlingEvent(cargo, completionTime, registrationTime, type, location, voyage);
+        return new HandlingEvent(cargo, completionTime, registrationTime, type, unlocode, voyage);
       }
     } catch (Exception e) {
       throw new CannotCreateHandlingEventException(e);

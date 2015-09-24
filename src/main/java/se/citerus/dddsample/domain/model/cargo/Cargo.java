@@ -4,6 +4,7 @@ import org.apache.commons.lang.Validate;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.domain.model.location.Location;
+import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.shared.DomainObjectUtils;
 import se.citerus.dddsample.domain.shared.Entity;
 
@@ -46,7 +47,7 @@ import se.citerus.dddsample.domain.shared.Entity;
 public class Cargo implements Entity<Cargo> {
 
   private TrackingId trackingId;
-  private Location origin;
+  private UnLocode origin;
   private RouteSpecification routeSpecification;
   private Itinerary itinerary;
   private Delivery delivery;
@@ -78,7 +79,7 @@ public class Cargo implements Entity<Cargo> {
   /**
    * @return Origin location.
    */
-  public Location origin() {
+  public UnLocode origin() {
     return origin;
   }
 

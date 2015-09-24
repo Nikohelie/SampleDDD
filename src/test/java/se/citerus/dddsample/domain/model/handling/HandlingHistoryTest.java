@@ -22,14 +22,14 @@ public class HandlingHistoryTest extends TestCase {
   HandlingHistory handlingHistory;
 
   protected void setUp() throws Exception {
-    cargo = new Cargo(new TrackingId("ABC"), new RouteSpecification(SHANGHAI, DALLAS, toDate("2009-04-01")));
+    cargo = new Cargo(new TrackingId("ABC"), new RouteSpecification(SHANGHAI.unLocode(), DALLAS.unLocode(), toDate("2009-04-01")));
     voyage = new Voyage.Builder(new VoyageNumber("X25"), HONGKONG).
       addMovement(SHANGHAI, new Date(), new Date()).
       addMovement(DALLAS, new Date(), new Date()).
       build();
-    event1 = new HandlingEvent(cargo, toDate("2009-03-05"), new Date(100), HandlingEvent.Type.LOAD, SHANGHAI, voyage);
-    event1duplicate = new HandlingEvent(cargo, toDate("2009-03-05"), new Date(200), HandlingEvent.Type.LOAD, SHANGHAI, voyage);
-    event2 = new HandlingEvent(cargo, toDate("2009-03-10"), new Date(150), HandlingEvent.Type.UNLOAD, DALLAS, voyage);
+    event1 = new HandlingEvent(cargo, toDate("2009-03-05"), new Date(100), HandlingEvent.Type.LOAD, SHANGHAI.unLocode(), voyage);
+    event1duplicate = new HandlingEvent(cargo, toDate("2009-03-05"), new Date(200), HandlingEvent.Type.LOAD, SHANGHAI.unLocode(), voyage);
+    event2 = new HandlingEvent(cargo, toDate("2009-03-10"), new Date(150), HandlingEvent.Type.UNLOAD, DALLAS.unLocode(), voyage);
 
     handlingHistory = new HandlingHistory(asList(event2, event1, event1duplicate));
   }

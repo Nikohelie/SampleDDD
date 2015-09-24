@@ -6,6 +6,7 @@ import se.citerus.dddsample.domain.model.cargo.Delivery;
 import se.citerus.dddsample.domain.model.cargo.HandlingActivity;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.location.Location;
+import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 
 import java.text.SimpleDateFormat;
@@ -59,8 +60,9 @@ public final class CargoTrackingViewAdapter {
    * @param location a location
    * @return A formatted string for displaying the location.
    */
-  private String getDisplayText(Location location) {
-    return location.name();
+  private String getDisplayText(Optional<UnLocode> location) {
+    // Get text from Location aggregate.
+    return "FIXME!!!";
   }
 
   /**
@@ -100,14 +102,14 @@ public final class CargoTrackingViewAdapter {
    * @return Cargo destination location.
    */
   public String getDestination() {
-    return getDisplayText(cargo.routeSpecification().destination());
+    return getDisplayText(Optional.of(cargo.routeSpecification().destination()));
   }
 
   /**
    * @return Cargo osigin location.
    */
   public String getOrigin() {
-    return getDisplayText(cargo.origin());
+    return getDisplayText(Optional.of(cargo.origin()));
   }
 
   /**
@@ -135,13 +137,13 @@ public final class CargoTrackingViewAdapter {
     if (type.sameValueAs(HandlingEvent.Type.LOAD)) {
         return
           text + type.name().toLowerCase() + " cargo onto voyage " + activity.voyage().voyageNumber() +
-          " in " + activity.location().name();
+          " in " + "FIXME!!!";
       } else if (type.sameValueAs(HandlingEvent.Type.UNLOAD)) {
         return
           text + type.name().toLowerCase() + " cargo off of " + activity.voyage().voyageNumber() +
-          " in " + activity.location().name();
+          " in " + "FIXME!!!";
       } else {
-        return text + type.name().toLowerCase() + " cargo in " + activity.location().name();
+        return text + type.name().toLowerCase() + " cargo in " + "FIXME!!!";
       }
   }
 
@@ -172,7 +174,7 @@ public final class CargoTrackingViewAdapter {
      * @return Location where the event occurred.
      */
     public String getLocation() {
-      return handlingEvent.location().name();
+      return "FIXME!!!";
     }
 
     /**
@@ -214,7 +216,7 @@ public final class CargoTrackingViewAdapter {
         case UNLOAD:
           args = new Object[] {
             handlingEvent.voyage().voyageNumber().idString(),
-            handlingEvent.location().name(),
+            "FIXME!!!",
             handlingEvent.completionTime()
           };
           break;
@@ -222,7 +224,7 @@ public final class CargoTrackingViewAdapter {
         case RECEIVE:
         case CLAIM:
           args = new Object[] {
-            handlingEvent.location().name(),
+            "FIXME!!!",
             handlingEvent.completionTime()
           };
           break;

@@ -65,12 +65,10 @@ public class HandlingEventRepositoryTest {
 
     @Test
     public void testSave() {
-        Location location = locationRepository.find(new UnLocode("SESTO"));
-
         Cargo cargo = cargoRepository.find(new TrackingId("XYZ"));
         Date completionTime = new Date(10);
         Date registrationTime = new Date(20);
-        HandlingEvent event = new HandlingEvent(cargo, completionTime, registrationTime, HandlingEvent.Type.CLAIM, location);
+        HandlingEvent event = new HandlingEvent(cargo, completionTime, registrationTime, HandlingEvent.Type.CLAIM, new UnLocode("SESTO"));
 
         handlingEventRepository.store(event);
 

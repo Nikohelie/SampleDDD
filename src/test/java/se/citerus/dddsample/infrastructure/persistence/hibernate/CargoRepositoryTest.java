@@ -143,14 +143,14 @@ public class CargoRepositoryTest {
         Location origin = locationRepository.find(STOCKHOLM.unLocode());
         Location destination = locationRepository.find(MELBOURNE.unLocode());
 
-        Cargo cargo = new Cargo(trackingId, new RouteSpecification(origin, destination, new Date()));
+        Cargo cargo = new Cargo(trackingId, new RouteSpecification(STOCKHOLM.unLocode(), MELBOURNE.unLocode(), new Date()));
         cargoRepository.store(cargo);
 
         cargo.assignToRoute(new Itinerary(Collections.singletonList(
                 new Leg(
                         voyageRepository.find(new VoyageNumber("0101")),
-                        locationRepository.find(STOCKHOLM.unLocode()),
-                        locationRepository.find(MELBOURNE.unLocode()),
+                        STOCKHOLM.unLocode(),
+                        MELBOURNE.unLocode(),
                         new Date(), new Date())
         )));
 
@@ -179,9 +179,7 @@ public class CargoRepositoryTest {
         Long cargoId = getLongId(cargo);
         assertEquals(3, jdbcTemplate.queryForObject("select count(*) from Leg where cargo_id = ?", new Object[]{cargoId}, Integer.class).intValue());
 
-        Location legFrom = locationRepository.find(new UnLocode("FIHEL"));
-        Location legTo = locationRepository.find(new UnLocode("DEHAM"));
-        Itinerary newItinerary = new Itinerary(Collections.singletonList(new Leg(CM004, legFrom, legTo, new Date(), new Date())));
+        Itinerary newItinerary = new Itinerary(Collections.singletonList(new Leg(CM004, new UnLocode("FIHEL"), new UnLocode("DEHAM"), new Date(), new Date())));
 
         cargo.assignToRoute(newItinerary);
 

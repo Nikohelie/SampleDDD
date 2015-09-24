@@ -38,7 +38,7 @@ public class HandlingEventFactoryTest extends TestCase {
 
 
     trackingId = new TrackingId("ABC");
-    RouteSpecification routeSpecification = new RouteSpecification(TOKYO, HELSINKI, new Date());
+    RouteSpecification routeSpecification = new RouteSpecification(TOKYO.unLocode(), HELSINKI.unLocode(), new Date());
     cargo = new Cargo(trackingId, routeSpecification);
   }
 

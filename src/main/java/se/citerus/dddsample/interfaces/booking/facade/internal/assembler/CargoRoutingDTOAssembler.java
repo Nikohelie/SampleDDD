@@ -18,15 +18,15 @@ public class CargoRoutingDTOAssembler {
   public CargoRoutingDTO toDTO(final Cargo cargo) {
     final CargoRoutingDTO dto = new CargoRoutingDTO(
       cargo.trackingId().idString(),
-      cargo.origin().unLocode().idString(),
-      cargo.routeSpecification().destination().unLocode().idString(),
+      cargo.origin().idString(),
+      cargo.routeSpecification().destination().idString(),
       cargo.routeSpecification().arrivalDeadline(),
       cargo.delivery().routingStatus().sameValueAs(RoutingStatus.MISROUTED));
     for (Leg leg : cargo.itinerary().legs()) {
       dto.addLeg(
         leg.voyage().voyageNumber().idString(),
-        leg.loadLocation().unLocode().idString(),
-        leg.unloadLocation().unLocode().idString(),
+        leg.loadLocation().idString(),
+        leg.unloadLocation().idString(),
         leg.loadTime(),
         leg.unloadTime());
     }

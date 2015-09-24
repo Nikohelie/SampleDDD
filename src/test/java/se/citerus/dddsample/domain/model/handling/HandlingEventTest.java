@@ -18,22 +18,22 @@ public class HandlingEventTest extends TestCase {
 
   protected void setUp() throws Exception {
     TrackingId trackingId = new TrackingId("XYZ");
-    RouteSpecification routeSpecification = new RouteSpecification(HONGKONG, NEWYORK, new Date());
+    RouteSpecification routeSpecification = new RouteSpecification(HONGKONG.unLocode(), NEWYORK.unLocode(), new Date());
     cargo = new Cargo(trackingId, routeSpecification);
   }
 
   public void testNewWithCarrierMovement() throws Exception {
 
-    HandlingEvent e1 = new HandlingEvent(cargo, new Date(), new Date(), LOAD, HONGKONG, CM003);
+    HandlingEvent e1 = new HandlingEvent(cargo, new Date(), new Date(), LOAD, HONGKONG.unLocode(), CM003);
     assertEquals(HONGKONG, e1.location());
 
-    HandlingEvent e2 = new HandlingEvent(cargo, new Date(), new Date(), UNLOAD, NEWYORK, CM003);
+    HandlingEvent e2 = new HandlingEvent(cargo, new Date(), new Date(), UNLOAD, NEWYORK.unLocode(), CM003);
     assertEquals(NEWYORK, e2.location());
 
       // These event types prohibit a carrier movement association
     for (HandlingEvent.Type type : asList(CLAIM, RECEIVE, CUSTOMS)) {
       try {
-        new HandlingEvent(cargo, new Date(), new Date(), type, HONGKONG, CM003);
+        new HandlingEvent(cargo, new Date(), new Date(), type, HONGKONG.unLocode(), CM003);
         fail("Handling event type " + type + " prohibits carrier movement");
       } catch (IllegalArgumentException expected) {}
     }
@@ -41,37 +41,37 @@ public class HandlingEventTest extends TestCase {
       // These event types requires a carrier movement association
     for (HandlingEvent.Type type : asList(LOAD, UNLOAD)) {
         try {
-          new HandlingEvent(cargo, new Date(), new Date(), type, HONGKONG, null);
+          new HandlingEvent(cargo, new Date(), new Date(), type, HONGKONG.unLocode(), null);
             fail("Handling event type " + type + " requires carrier movement");
         } catch (IllegalArgumentException expected) {}
     }
   }
 
   public void testNewWithLocation() throws Exception {
-    HandlingEvent e1 = new HandlingEvent(cargo, new Date(), new Date(), HandlingEvent.Type.CLAIM, HELSINKI);
+    HandlingEvent e1 = new HandlingEvent(cargo, new Date(), new Date(), HandlingEvent.Type.CLAIM, HELSINKI.unLocode());
     assertEquals(HELSINKI, e1.location());
   }
 
   public void testCurrentLocationLoadEvent() throws Exception {
 
-    HandlingEvent ev = new HandlingEvent(cargo, new Date(), new Date(), LOAD, CHICAGO, CM004);
+    HandlingEvent ev = new HandlingEvent(cargo, new Date(), new Date(), LOAD, CHICAGO.unLocode(), CM004);
     
     assertEquals(CHICAGO, ev.location());
   }
   
   public void testCurrentLocationUnloadEvent() throws Exception {
-    HandlingEvent ev = new HandlingEvent(cargo, new Date(), new Date(), UNLOAD, HAMBURG, CM004);
+    HandlingEvent ev = new HandlingEvent(cargo, new Date(), new Date(), UNLOAD, HAMBURG.unLocode(), CM004);
     
     assertEquals(HAMBURG, ev.location());
   }
   
   public void testCurrentLocationReceivedEvent() throws Exception {
-    HandlingEvent ev = new HandlingEvent(cargo, new Date(), new Date(), RECEIVE, CHICAGO);
+    HandlingEvent ev = new HandlingEvent(cargo, new Date(), new Date(), RECEIVE, CHICAGO.unLocode());
 
     assertEquals(CHICAGO, ev.location());
   }
   public void testCurrentLocationClaimedEvent() throws Exception {
-    HandlingEvent ev = new HandlingEvent(cargo, new Date(), new Date(), CLAIM, CHICAGO);
+    HandlingEvent ev = new HandlingEvent(cargo, new Date(), new Date(), CLAIM, CHICAGO.unLocode());
 
     assertEquals(CHICAGO, ev.location());
   }
@@ -96,8 +96,8 @@ public class HandlingEventTest extends TestCase {
     Date timeOccured = new Date();
     Date timeRegistered = new Date();
 
-    HandlingEvent ev1 = new HandlingEvent(cargo, timeOccured, timeRegistered, LOAD, CHICAGO, SampleVoyages.CM005);
-    HandlingEvent ev2 = new HandlingEvent(cargo, timeOccured, timeRegistered, LOAD, CHICAGO, SampleVoyages.CM005);
+    HandlingEvent ev1 = new HandlingEvent(cargo, timeOccured, timeRegistered, LOAD, CHICAGO.unLocode(), SampleVoyages.CM005);
+    HandlingEvent ev2 = new HandlingEvent(cargo, timeOccured, timeRegistered, LOAD, CHICAGO.unLocode(), SampleVoyages.CM005);
 
     // Two handling events are not equal() even if all non-uuid fields are identical
     assertTrue(ev1.equals(ev2));

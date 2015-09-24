@@ -3,6 +3,7 @@ package se.citerus.dddsample.domain.model.cargo;
 import org.apache.commons.lang.Validate;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.location.Location;
+import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
 import java.util.Collections;
@@ -59,7 +60,7 @@ public class Itinerary implements ValueObject<Itinerary> {
     if (event.type() == HandlingEvent.Type.LOAD) {
       //Check that the there is one leg with same load location and voyage
       for (Leg leg : legs) {
-        if (leg.loadLocation().sameIdentityAs(event.location()) &&
+        if (leg.loadLocation().sameValueAs(event.location()) &&
             leg.voyage().sameIdentityAs(event.voyage()))
           return true;
       }
@@ -89,23 +90,15 @@ public class Itinerary implements ValueObject<Itinerary> {
   /**
    * @return The initial departure location.
    */
-  Location initialDepartureLocation() {
-     if (legs.isEmpty()) {
-       return Location.UNKNOWN;
-     } else {
-       return legs.get(0).loadLocation();
-     }
+  UnLocode initialDepartureLocation() {
+     return legs.get(0).loadLocation();
   }
 
   /**
    * @return The final arrival location.
    */
-  Location finalArrivalLocation() {
-    if (legs.isEmpty()) {
-      return Location.UNKNOWN;
-    } else {
-      return lastLeg().unloadLocation();
-    }
+  UnLocode finalArrivalLocation() {
+    return lastLeg().unloadLocation();
   }
 
   /**

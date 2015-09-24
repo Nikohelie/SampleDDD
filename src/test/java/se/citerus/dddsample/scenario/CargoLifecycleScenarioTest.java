@@ -127,7 +127,7 @@ public class CargoLifecycleScenarioTest extends TestCase {
     assertEquals(NOT_RECEIVED, cargo.delivery().transportStatus());
     assertEquals(ROUTED, cargo.delivery().routingStatus());
     assertNotNull(cargo.delivery().estimatedTimeOfArrival());
-    assertEquals(new HandlingActivity(RECEIVE, HONGKONG), cargo.delivery().nextExpectedActivity());
+    assertEquals(new HandlingActivity(RECEIVE, HONGKONG.unLocode()), cargo.delivery().nextExpectedActivity());
 
     /*
       Use case 3: handling
@@ -160,7 +160,7 @@ public class CargoLifecycleScenarioTest extends TestCase {
     assertEquals(HONGKONG, cargo.delivery().lastKnownLocation());
     assertEquals(ONBOARD_CARRIER, cargo.delivery().transportStatus());
     assertFalse(cargo.delivery().isMisdirected());
-    assertEquals(new HandlingActivity(UNLOAD, NEWYORK, v100), cargo.delivery().nextExpectedActivity());
+    assertEquals(new HandlingActivity(UNLOAD, NEWYORK.unLocode(), v100), cargo.delivery().nextExpectedActivity());
 
 
     /*
@@ -199,7 +199,7 @@ public class CargoLifecycleScenarioTest extends TestCase {
     // TODO cleaner reroute from "earliest location from where the new route originates"
 
     // Specify a new route, this time from Tokyo (where it was incorrectly unloaded) to Stockholm
-    RouteSpecification fromTokyo = new RouteSpecification(TOKYO, STOCKHOLM, arrivalDeadline);
+    RouteSpecification fromTokyo = new RouteSpecification(TOKYO.unLocode(), STOCKHOLM.unLocode(), arrivalDeadline);
     cargo.specifyNewRoute(fromTokyo);
 
     // The old itinerary does not satisfy the new specification
@@ -232,7 +232,7 @@ public class CargoLifecycleScenarioTest extends TestCase {
     assertEquals(TOKYO, cargo.delivery().lastKnownLocation());
     assertEquals(ONBOARD_CARRIER, cargo.delivery().transportStatus());
     assertFalse(cargo.delivery().isMisdirected());
-    assertEquals(new HandlingActivity(UNLOAD, HAMBURG, v300), cargo.delivery().nextExpectedActivity());
+    assertEquals(new HandlingActivity(UNLOAD, HAMBURG.unLocode(), v300), cargo.delivery().nextExpectedActivity());
 
     // Unload in Hamburg
     handlingEventService.registerHandlingEvent(
@@ -244,7 +244,7 @@ public class CargoLifecycleScenarioTest extends TestCase {
     assertEquals(HAMBURG, cargo.delivery().lastKnownLocation());
     assertEquals(IN_PORT, cargo.delivery().transportStatus());
     assertFalse(cargo.delivery().isMisdirected());
-    assertEquals(new HandlingActivity(LOAD, HAMBURG, v400), cargo.delivery().nextExpectedActivity());
+    assertEquals(new HandlingActivity(LOAD, HAMBURG.unLocode(), v400), cargo.delivery().nextExpectedActivity());
 
 
     // Load in Hamburg
@@ -254,10 +254,10 @@ public class CargoLifecycleScenarioTest extends TestCase {
 
     // Check current state - should be ok
     assertEquals(v400, cargo.delivery().currentVoyage());
-    assertEquals(HAMBURG, cargo.delivery().lastKnownLocation());
+    assertEquals(HAMBURG.unLocode(), cargo.delivery().lastKnownLocation().get());
     assertEquals(ONBOARD_CARRIER, cargo.delivery().transportStatus());
     assertFalse(cargo.delivery().isMisdirected());
-    assertEquals(new HandlingActivity(UNLOAD, STOCKHOLM, v400), cargo.delivery().nextExpectedActivity());
+    assertEquals(new HandlingActivity(UNLOAD, STOCKHOLM.unLocode(), v400), cargo.delivery().nextExpectedActivity());
 
 
     // Unload in Stockholm
@@ -270,7 +270,7 @@ public class CargoLifecycleScenarioTest extends TestCase {
     assertEquals(STOCKHOLM, cargo.delivery().lastKnownLocation());
     assertEquals(IN_PORT, cargo.delivery().transportStatus());
     assertFalse(cargo.delivery().isMisdirected());
-    assertEquals(new HandlingActivity(CLAIM, STOCKHOLM), cargo.delivery().nextExpectedActivity());
+    assertEquals(new HandlingActivity(CLAIM, STOCKHOLM.unLocode()), cargo.delivery().nextExpectedActivity());
 
     // Finally, cargo is claimed in Stockholm. This ends the cargo lifecycle from our perspective.
     handlingEventService.registerHandlingEvent(
@@ -297,21 +297,21 @@ public class CargoLifecycleScenarioTest extends TestCase {
   protected void setUp() throws Exception {
     routingService = new RoutingService() {
       public List<Itinerary> fetchRoutesForSpecification(RouteSpecification routeSpecification) {
-        if (routeSpecification.origin().equals(HONGKONG)) {
+        if (routeSpecification.origin().equals(HONGKONG.unLocode())) {
           // Hongkong - NYC - Chicago - Stockholm, initial routing
           return Arrays.asList(
             new Itinerary(Arrays.asList(
-              new Leg(v100, HONGKONG, NEWYORK, toDate("2009-03-03"), toDate("2009-03-09")),
-              new Leg(v200, NEWYORK, CHICAGO, toDate("2009-03-10"), toDate("2009-03-14")),
-              new Leg(v200, CHICAGO, STOCKHOLM, toDate("2009-03-07"), toDate("2009-03-11"))
+              new Leg(v100, HONGKONG.unLocode(), NEWYORK.unLocode(), toDate("2009-03-03"), toDate("2009-03-09")),
+              new Leg(v200, NEWYORK.unLocode(), CHICAGO.unLocode(), toDate("2009-03-10"), toDate("2009-03-14")),
+              new Leg(v200, CHICAGO.unLocode(), STOCKHOLM.unLocode(), toDate("2009-03-07"), toDate("2009-03-11"))
             ))
           );
         } else {
           // Tokyo - Hamburg - Stockholm, rerouting misdirected cargo from Tokyo 
           return Arrays.asList(
             new Itinerary(Arrays.asList(
-              new Leg(v300, TOKYO, HAMBURG, toDate("2009-03-08"), toDate("2009-03-12")),
-              new Leg(v400, HAMBURG, STOCKHOLM, toDate("2009-03-14"), toDate("2009-03-15"))
+              new Leg(v300, TOKYO.unLocode(), HAMBURG.unLocode(), toDate("2009-03-08"), toDate("2009-03-12")),
+              new Leg(v400, HAMBURG.unLocode(), STOCKHOLM.unLocode(), toDate("2009-03-14"), toDate("2009-03-15"))
             ))
           );
         }

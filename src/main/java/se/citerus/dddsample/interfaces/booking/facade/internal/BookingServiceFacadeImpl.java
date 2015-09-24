@@ -64,7 +64,7 @@ public class BookingServiceFacadeImpl implements BookingServiceFacade {
 
   @Override
   public void assignCargoToRoute(String trackingIdStr, RouteCandidateDTO routeCandidateDTO) {
-    final Itinerary itinerary = new ItineraryCandidateDTOAssembler().fromDTO(routeCandidateDTO, voyageRepository, locationRepository);
+    final Itinerary itinerary = new ItineraryCandidateDTOAssembler().fromDTO(routeCandidateDTO, voyageRepository);
     final TrackingId trackingId = new TrackingId(trackingIdStr);
 
     bookingService.assignCargoToRoute(itinerary, trackingId);

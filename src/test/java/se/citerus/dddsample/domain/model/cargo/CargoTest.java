@@ -35,7 +35,7 @@ public class CargoTest extends TestCase {
     final TrackingId trackingId = new TrackingId("XYZ");
     final Date arrivalDeadline = DateTestUtil.toDate("2009-03-13");
     final RouteSpecification routeSpecification = new RouteSpecification(
-      STOCKHOLM, MELBOURNE, arrivalDeadline
+      STOCKHOLM.unLocode(), MELBOURNE.unLocode(), arrivalDeadline
     );
 
     final Cargo cargo = new Cargo(trackingId, routeSpecification);
@@ -47,7 +47,7 @@ public class CargoTest extends TestCase {
   }
 
   public void testRoutingStatus() throws Exception {
-    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, new Date()));
+    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM.unLocode(), MELBOURNE.unLocode(), new Date()));
     final Itinerary good = new Itinerary();
     final Itinerary bad = new Itinerary();
     final RouteSpecification acceptOnlyGood = new RouteSpecification(cargo.origin(), cargo.routeSpecification().destination(), new Date()) {
@@ -69,7 +69,7 @@ public class CargoTest extends TestCase {
   }
 
   public void testlastKnownLocationUnknownWhenNoEvents() throws Exception {
-    Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, new Date()));
+    Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM.unLocode(), MELBOURNE.unLocode(), new Date()));
 
     assertEquals(Location.UNKNOWN, cargo.delivery().lastKnownLocation());
   }
@@ -99,8 +99,8 @@ public class CargoTest extends TestCase {
   }
 
   public void testEquality() throws Exception {
-    RouteSpecification spec1 = new RouteSpecification(STOCKHOLM, HONGKONG, new Date());
-    RouteSpecification spec2 = new RouteSpecification(STOCKHOLM, MELBOURNE, new Date());
+    RouteSpecification spec1 = new RouteSpecification(STOCKHOLM.unLocode(), HONGKONG.unLocode(), new Date());
+    RouteSpecification spec2 = new RouteSpecification(STOCKHOLM.unLocode(), MELBOURNE.unLocode(), new Date());
     Cargo c1 = new Cargo(new TrackingId("ABC"), spec1);
     Cargo c2 = new Cargo(new TrackingId("CBA"), spec1);
     Cargo c3 = new Cargo(new TrackingId("ABC"), spec2);
@@ -118,7 +118,7 @@ public class CargoTest extends TestCase {
 
     // Adding an event unrelated to unloading at final destination
     events.add(
-      new HandlingEvent(cargo, new Date(10), new Date(), HandlingEvent.Type.RECEIVE, HANGZOU));
+      new HandlingEvent(cargo, new Date(10), new Date(), HandlingEvent.Type.RECEIVE, HANGZOU.unLocode()));
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     assertFalse(cargo.delivery().isUnloadedAtDestination());
 
@@ -128,28 +128,28 @@ public class CargoTest extends TestCase {
 
     // Adding an unload event, but not at the final destination
     events.add(
-      new HandlingEvent(cargo, new Date(20), new Date(), HandlingEvent.Type.UNLOAD, TOKYO, voyage));
+      new HandlingEvent(cargo, new Date(20), new Date(), HandlingEvent.Type.UNLOAD, TOKYO.unLocode(), voyage));
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     assertFalse(cargo.delivery().isUnloadedAtDestination());
 
     // Adding an event in the final destination, but not unload
     events.add(
-      new HandlingEvent(cargo, new Date(30), new Date(), HandlingEvent.Type.CUSTOMS, NEWYORK));
+      new HandlingEvent(cargo, new Date(30), new Date(), HandlingEvent.Type.CUSTOMS, NEWYORK.unLocode()));
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     assertFalse(cargo.delivery().isUnloadedAtDestination());
 
     // Finally, cargo is unloaded at final destination
     events.add(
-      new HandlingEvent(cargo, new Date(40), new Date(), HandlingEvent.Type.UNLOAD, NEWYORK, voyage));
+      new HandlingEvent(cargo, new Date(40), new Date(), HandlingEvent.Type.UNLOAD, NEWYORK.unLocode(), voyage));
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     assertTrue(cargo.delivery().isUnloadedAtDestination());
   }
 
   // TODO: Generate test data some better way
   private Cargo populateCargoReceivedStockholm() throws Exception {
-    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, new Date()));
+    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM.unLocode(), MELBOURNE.unLocode(), new Date()));
 
-    HandlingEvent he = new HandlingEvent(cargo, getDate("2007-12-01"), new Date(), HandlingEvent.Type.RECEIVE, STOCKHOLM);
+    HandlingEvent he = new HandlingEvent(cargo, getDate("2007-12-01"), new Date(), HandlingEvent.Type.RECEIVE, STOCKHOLM.unLocode());
     events.add(he);
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
 
@@ -159,63 +159,63 @@ public class CargoTest extends TestCase {
   private Cargo populateCargoClaimedMelbourne() throws Exception {
     final Cargo cargo = populateCargoOffMelbourne();
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-09"), new Date(), HandlingEvent.Type.CLAIM, MELBOURNE));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-09"), new Date(), HandlingEvent.Type.CLAIM, MELBOURNE.unLocode()));
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
 
     return cargo;
   }
 
   private Cargo populateCargoOffHongKong() throws Exception {
-    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, new Date()));
+    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM.unLocode(), MELBOURNE.unLocode(), new Date()));
 
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), new Date(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), new Date(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), new Date(), HandlingEvent.Type.LOAD, STOCKHOLM.unLocode(), voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), new Date(), HandlingEvent.Type.UNLOAD, HAMBURG.unLocode(), voyage));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), new Date(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-04"), new Date(), HandlingEvent.Type.UNLOAD, HONGKONG, voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), new Date(), HandlingEvent.Type.LOAD, HAMBURG.unLocode(), voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-04"), new Date(), HandlingEvent.Type.UNLOAD, HONGKONG.unLocode(), voyage));
 
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     return cargo;
   }
 
   private Cargo populateCargoOnHamburg() throws Exception {
-    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, new Date()));
+    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM.unLocode(), MELBOURNE.unLocode(), new Date()));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), new Date(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), new Date(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), new Date(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), new Date(), HandlingEvent.Type.LOAD, STOCKHOLM.unLocode(), voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), new Date(), HandlingEvent.Type.UNLOAD, HAMBURG.unLocode(), voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), new Date(), HandlingEvent.Type.LOAD, HAMBURG.unLocode(), voyage));
 
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     return cargo;
   }
 
   private Cargo populateCargoOffMelbourne() throws Exception {
-    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, new Date()));
+    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM.unLocode(), MELBOURNE.unLocode(), new Date()));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), new Date(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), new Date(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), new Date(), HandlingEvent.Type.LOAD, STOCKHOLM.unLocode(), voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), new Date(), HandlingEvent.Type.UNLOAD, HAMBURG.unLocode(), voyage));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), new Date(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-04"), new Date(), HandlingEvent.Type.UNLOAD, HONGKONG, voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), new Date(), HandlingEvent.Type.LOAD, HAMBURG.unLocode(), voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-04"), new Date(), HandlingEvent.Type.UNLOAD, HONGKONG.unLocode(), voyage));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-05"), new Date(), HandlingEvent.Type.LOAD, HONGKONG, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-07"), new Date(), HandlingEvent.Type.UNLOAD, MELBOURNE, voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-05"), new Date(), HandlingEvent.Type.LOAD, HONGKONG.unLocode(), voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-07"), new Date(), HandlingEvent.Type.UNLOAD, MELBOURNE.unLocode(), voyage));
 
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     return cargo;
   }
 
   private Cargo populateCargoOnHongKong() throws Exception {
-    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, new Date()));
+    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM.unLocode(), MELBOURNE.unLocode(), new Date()));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), new Date(), HandlingEvent.Type.LOAD, STOCKHOLM, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), new Date(), HandlingEvent.Type.UNLOAD, HAMBURG, voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-01"), new Date(), HandlingEvent.Type.LOAD, STOCKHOLM.unLocode(), voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-02"), new Date(), HandlingEvent.Type.UNLOAD, HAMBURG.unLocode(), voyage));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), new Date(), HandlingEvent.Type.LOAD, HAMBURG, voyage));
-    events.add(new HandlingEvent(cargo, getDate("2007-12-04"), new Date(), HandlingEvent.Type.UNLOAD, HONGKONG, voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-03"), new Date(), HandlingEvent.Type.LOAD, HAMBURG.unLocode(), voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-04"), new Date(), HandlingEvent.Type.UNLOAD, HONGKONG.unLocode(), voyage));
 
-    events.add(new HandlingEvent(cargo, getDate("2007-12-05"), new Date(), HandlingEvent.Type.LOAD, HONGKONG, voyage));
+    events.add(new HandlingEvent(cargo, getDate("2007-12-05"), new Date(), HandlingEvent.Type.LOAD, HONGKONG.unLocode(), voyage));
 
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
     return cargo;
@@ -223,7 +223,7 @@ public class CargoTest extends TestCase {
 
   public void testIsMisdirected() throws Exception {
     //A cargo with no itinerary is not misdirected
-    Cargo cargo = new Cargo(new TrackingId("TRKID"), new RouteSpecification(SHANGHAI, GOTHENBURG, new Date()));
+    Cargo cargo = new Cargo(new TrackingId("TRKID"), new RouteSpecification(SHANGHAI.unLocode(), GOTHENBURG.unLocode(), new Date()));
     assertFalse(cargo.delivery().isMisdirected());
 
     cargo = setUpCargoWithItinerary(SHANGHAI, ROTTERDAM, GOTHENBURG);
@@ -234,13 +234,13 @@ public class CargoTest extends TestCase {
     Collection<HandlingEvent> handlingEvents = new ArrayList<HandlingEvent>();
 
     //Happy path
-    handlingEvents.add(new HandlingEvent(cargo, new Date(10), new Date(20), HandlingEvent.Type.RECEIVE, SHANGHAI));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(30), new Date(40), HandlingEvent.Type.LOAD, SHANGHAI, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(50), new Date(60), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(70), new Date(80), HandlingEvent.Type.LOAD, ROTTERDAM, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(90), new Date(100), HandlingEvent.Type.UNLOAD, GOTHENBURG, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(110), new Date(120), HandlingEvent.Type.CLAIM, GOTHENBURG));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(130), new Date(140), HandlingEvent.Type.CUSTOMS, GOTHENBURG));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(10), new Date(20), HandlingEvent.Type.RECEIVE, SHANGHAI.unLocode()));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(30), new Date(40), HandlingEvent.Type.LOAD, SHANGHAI.unLocode(), voyage));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(50), new Date(60), HandlingEvent.Type.UNLOAD, ROTTERDAM.unLocode(), voyage));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(70), new Date(80), HandlingEvent.Type.LOAD, ROTTERDAM.unLocode(), voyage));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(90), new Date(100), HandlingEvent.Type.UNLOAD, GOTHENBURG.unLocode(), voyage));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(110), new Date(120), HandlingEvent.Type.CLAIM, GOTHENBURG.unLocode()));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(130), new Date(140), HandlingEvent.Type.CUSTOMS, GOTHENBURG.unLocode()));
 
     events.addAll(handlingEvents);
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
@@ -251,7 +251,7 @@ public class CargoTest extends TestCase {
     cargo = setUpCargoWithItinerary(SHANGHAI, ROTTERDAM, GOTHENBURG);
     handlingEvents = new ArrayList<HandlingEvent>();
 
-    handlingEvents.add(new HandlingEvent(cargo, new Date(), new Date(), HandlingEvent.Type.RECEIVE, HANGZOU));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(), new Date(), HandlingEvent.Type.RECEIVE, HANGZOU.unLocode()));
     events.addAll(handlingEvents);
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
 
@@ -261,10 +261,10 @@ public class CargoTest extends TestCase {
     cargo = setUpCargoWithItinerary(SHANGHAI, ROTTERDAM, GOTHENBURG);
     handlingEvents = new ArrayList<HandlingEvent>();
 
-    handlingEvents.add(new HandlingEvent(cargo, new Date(10), new Date(20), HandlingEvent.Type.RECEIVE, SHANGHAI));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(30), new Date(40), HandlingEvent.Type.LOAD, SHANGHAI, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(50), new Date(60), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(70), new Date(80), HandlingEvent.Type.LOAD, ROTTERDAM, voyage));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(10), new Date(20), HandlingEvent.Type.RECEIVE, SHANGHAI.unLocode()));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(30), new Date(40), HandlingEvent.Type.LOAD, SHANGHAI.unLocode(), voyage));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(50), new Date(60), HandlingEvent.Type.UNLOAD, ROTTERDAM.unLocode(), voyage));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(70), new Date(80), HandlingEvent.Type.LOAD, ROTTERDAM.unLocode(), voyage));
 
     events.addAll(handlingEvents);
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
@@ -275,10 +275,10 @@ public class CargoTest extends TestCase {
     cargo = setUpCargoWithItinerary(SHANGHAI, ROTTERDAM, GOTHENBURG);
     handlingEvents = new ArrayList<HandlingEvent>();
 
-    handlingEvents.add(new HandlingEvent(cargo, new Date(10), new Date(20), HandlingEvent.Type.RECEIVE, SHANGHAI));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(30), new Date(40), HandlingEvent.Type.LOAD, SHANGHAI, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(50), new Date(60), HandlingEvent.Type.UNLOAD, ROTTERDAM, voyage));
-    handlingEvents.add(new HandlingEvent(cargo, new Date(), new Date(), HandlingEvent.Type.CLAIM, ROTTERDAM));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(10), new Date(20), HandlingEvent.Type.RECEIVE, SHANGHAI.unLocode()));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(30), new Date(40), HandlingEvent.Type.LOAD, SHANGHAI.unLocode(), voyage));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(50), new Date(60), HandlingEvent.Type.UNLOAD, ROTTERDAM.unLocode(), voyage));
+    handlingEvents.add(new HandlingEvent(cargo, new Date(), new Date(), HandlingEvent.Type.CLAIM, ROTTERDAM.unLocode()));
 
     events.addAll(handlingEvents);
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
@@ -287,12 +287,12 @@ public class CargoTest extends TestCase {
   }
 
   private Cargo setUpCargoWithItinerary(Location origin, Location midpoint, Location destination) {
-    Cargo cargo = new Cargo(new TrackingId("CARGO1"), new RouteSpecification(origin, destination, new Date()));
+    Cargo cargo = new Cargo(new TrackingId("CARGO1"), new RouteSpecification(origin.unLocode(), destination.unLocode(), new Date()));
 
     Itinerary itinerary = new Itinerary(
       Arrays.asList(
-        new Leg(voyage, origin, midpoint, new Date(), new Date()),
-        new Leg(voyage, midpoint, destination, new Date(), new Date())
+        new Leg(voyage, origin.unLocode(), midpoint.unLocode(), new Date(), new Date()),
+        new Leg(voyage, midpoint.unLocode(), destination.unLocode(), new Date(), new Date())
       )
     );
 

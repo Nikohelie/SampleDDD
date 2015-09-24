@@ -29,8 +29,8 @@ public class ItineraryCandidateDTOAssemblerTest extends TestCase {
 
     final Itinerary itinerary = new Itinerary(
       Arrays.asList(
-        new Leg(CM001, origin, SHANGHAI, new Date(), new Date()),
-        new Leg(CM001, ROTTERDAM, destination, new Date(), new Date())
+        new Leg(CM001, origin.unLocode(), SHANGHAI.unLocode(), new Date(), new Date()),
+        new Leg(CM001, ROTTERDAM.unLocode(), destination.unLocode(), new Date(), new Date())
       )
     );
 
@@ -66,7 +66,7 @@ public class ItineraryCandidateDTOAssemblerTest extends TestCase {
 
 
     // Tested call
-    final Itinerary itinerary = assembler.fromDTO(new RouteCandidateDTO(legs), voyageRepository, locationRepository);
+    final Itinerary itinerary = assembler.fromDTO(new RouteCandidateDTO(legs), voyageRepository);
 
     
     assertNotNull(itinerary);

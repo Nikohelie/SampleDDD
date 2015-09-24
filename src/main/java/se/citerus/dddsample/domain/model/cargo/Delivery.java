@@ -8,12 +8,14 @@ import static se.citerus.dddsample.domain.model.cargo.TransportStatus.*;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.handling.HandlingHistory;
 import se.citerus.dddsample.domain.model.location.Location;
+import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.shared.DomainObjectUtils;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Optional;
 
 /**
  * The actual transportation of the cargo, as opposed to
@@ -23,7 +25,7 @@ import java.util.Iterator;
 public class Delivery implements ValueObject<Delivery> {
 
   private TransportStatus transportStatus;
-  private Location lastKnownLocation;
+  private UnLocode lastKnownLocation;
   private Voyage currentVoyage;
   private boolean misdirected;
   private Date eta;
@@ -100,8 +102,8 @@ public class Delivery implements ValueObject<Delivery> {
   /**
    * @return Last known location of the cargo, or Location.UNKNOWN if the delivery history is empty.
    */
-  public Location lastKnownLocation() {
-    return DomainObjectUtils.nullSafe(lastKnownLocation, Location.UNKNOWN);
+  public Optional<UnLocode> lastKnownLocation() {
+    return Optional.ofNullable(lastKnownLocation);
   }
 
   /**
@@ -190,7 +192,7 @@ public class Delivery implements ValueObject<Delivery> {
     }
   }
 
-  private Location calculateLastKnownLocation() {
+  private UnLocode calculateLastKnownLocation() {
     if (lastEvent != null) {
       return lastEvent.location();
     } else {
@@ -231,7 +233,7 @@ public class Delivery implements ValueObject<Delivery> {
 
       case LOAD:
         for (Leg leg : itinerary.legs()) {
-          if (leg.loadLocation().sameIdentityAs(lastEvent.location())) {
+          if (leg.loadLocation().sameValueAs(lastEvent.location())) {
             return new HandlingActivity(HandlingEvent.Type.UNLOAD, leg.unloadLocation(), leg.voyage());
           }
         }
@@ -241,7 +243,7 @@ public class Delivery implements ValueObject<Delivery> {
       case UNLOAD:
         for (Iterator<Leg> it = itinerary.legs().iterator(); it.hasNext();) {
           final Leg leg = it.next();
-          if (leg.unloadLocation().sameIdentityAs(lastEvent.location())) {
+          if (leg.unloadLocation().sameValueAs(lastEvent.location())) {
             if (it.hasNext()) {
               final Leg nextLeg = it.next();
               return new HandlingActivity(HandlingEvent.Type.LOAD, nextLeg.loadLocation(), nextLeg.voyage());
@@ -278,7 +280,7 @@ public class Delivery implements ValueObject<Delivery> {
   private boolean calculateUnloadedAtDestination(RouteSpecification routeSpecification) {
     return lastEvent != null &&
       HandlingEvent.Type.UNLOAD.sameValueAs(lastEvent.type()) &&
-      routeSpecification.destination().sameIdentityAs(lastEvent.location());
+      routeSpecification.destination().sameValueAs(lastEvent.location());
   }
 
   private boolean onTrack() {

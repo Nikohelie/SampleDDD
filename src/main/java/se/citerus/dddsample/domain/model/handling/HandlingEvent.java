@@ -5,6 +5,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import se.citerus.dddsample.domain.model.cargo.Cargo;
 import se.citerus.dddsample.domain.model.location.Location;
+import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.shared.DomainEvent;
 import se.citerus.dddsample.domain.shared.DomainObjectUtils;
@@ -32,7 +33,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
 
   private Type type;
   private Voyage voyage;
-  private Location location;
+  private UnLocode location;
   private Date completionTime;
   private Date registrationTime;
   private Cargo cargo;
@@ -92,7 +93,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
                        final Date completionTime,
                        final Date registrationTime,
                        final Type type,
-                       final Location location,
+                       final UnLocode location,
                        final Voyage voyage) {
     Validate.notNull(cargo, "Cargo is required");
     Validate.notNull(completionTime, "Completion time is required");
@@ -124,7 +125,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
                        final Date completionTime,
                        final Date registrationTime,
                        final Type type,
-                       final Location location) {
+                       final UnLocode location) {
     Validate.notNull(cargo, "Cargo is required");
     Validate.notNull(completionTime, "Completion time is required");
     Validate.notNull(registrationTime, "Registration time is required");
@@ -159,7 +160,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
     return new Date(this.registrationTime.getTime());
   }
 
-  public Location location() {
+  public UnLocode location() {
     return this.location;
   }
 
@@ -204,7 +205,7 @@ public final class HandlingEvent implements DomainEvent<HandlingEvent> {
     final StringBuilder builder = new StringBuilder("\n--- Handling event ---\n").
       append("Cargo: ").append(cargo.trackingId()).append("\n").
       append("Type: ").append(type).append("\n").
-      append("Location: ").append(location.name()).append("\n").
+      append("Location: ").append(location.idString()).append("\n").
       append("Completed on: ").append(completionTime).append("\n").
       append("Registered on: ").append(registrationTime).append("\n");
     

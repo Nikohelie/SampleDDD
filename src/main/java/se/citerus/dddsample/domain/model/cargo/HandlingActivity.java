@@ -5,6 +5,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import se.citerus.dddsample.domain.model.handling.HandlingEvent;
 import se.citerus.dddsample.domain.model.location.Location;
+import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.Voyage;
 import se.citerus.dddsample.domain.shared.ValueObject;
 
@@ -19,10 +20,10 @@ public class HandlingActivity implements ValueObject<HandlingActivity> {
   // TODO make HandlingActivity a part of HandlingEvent too? There is some overlap. 
 
   private HandlingEvent.Type type;
-  private Location location;
+  private UnLocode location;
   private Voyage voyage;
 
-  public HandlingActivity(final HandlingEvent.Type type, final Location location) {
+  public HandlingActivity(final HandlingEvent.Type type, final UnLocode location) {
     Validate.notNull(type, "Handling event type is required");
     Validate.notNull(location, "Location is required");
 
@@ -30,7 +31,7 @@ public class HandlingActivity implements ValueObject<HandlingActivity> {
     this.location = location;
   }
 
-  public HandlingActivity(final HandlingEvent.Type type, final Location location, final Voyage voyage) {
+  public HandlingActivity(final HandlingEvent.Type type, final UnLocode location, final Voyage voyage) {
     Validate.notNull(type, "Handling event type is required");
     Validate.notNull(location, "Location is required");
     Validate.notNull(location, "Voyage is required");
@@ -44,7 +45,7 @@ public class HandlingActivity implements ValueObject<HandlingActivity> {
     return type;
   }
 
-  public Location location() {
+  public UnLocode location() {
     return location;
   }
 

@@ -18,12 +18,12 @@ public class CargoRoutingDTOAssemblerTest extends TestCase {
 
     final Location origin = STOCKHOLM;
     final Location destination = MELBOURNE;
-    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(origin, destination, new Date()));
+    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(origin.unLocode(), destination.unLocode(), new Date()));
 
     final Itinerary itinerary = new Itinerary(
       Arrays.asList(
-        new Leg(CM001, origin, SHANGHAI, new Date(), new Date()),
-        new Leg(CM001, ROTTERDAM, destination, new Date(), new Date())
+        new Leg(CM001, origin.unLocode(), SHANGHAI.unLocode(), new Date(), new Date()),
+        new Leg(CM001, ROTTERDAM.unLocode(), destination.unLocode(), new Date(), new Date())
       )
     );
 
@@ -47,7 +47,7 @@ public class CargoRoutingDTOAssemblerTest extends TestCase {
   public void testToDTO_NoItinerary() throws Exception {
     final CargoRoutingDTOAssembler assembler = new CargoRoutingDTOAssembler();
 
-    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM, MELBOURNE, new Date()));
+    final Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(STOCKHOLM.unLocode(), MELBOURNE.unLocode(), new Date()));
     final CargoRoutingDTO dto = assembler.toDTO(cargo);
 
     assertEquals("XYZ", dto.getTrackingId());

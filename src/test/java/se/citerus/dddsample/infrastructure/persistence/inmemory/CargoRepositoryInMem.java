@@ -82,7 +82,7 @@ public class CargoRepositoryInMem implements CargoRepository {
                                                        Location destination,
                                                        HandlingHistory handlingHistory) {
 
-        final RouteSpecification routeSpecification = new RouteSpecification(origin, destination, new Date());
+        final RouteSpecification routeSpecification = new RouteSpecification(origin.unLocode(), destination.unLocode(), new Date());
         final Cargo cargo = new Cargo(trackingId, routeSpecification);
         cargo.deriveDeliveryProgress(handlingHistory);
 

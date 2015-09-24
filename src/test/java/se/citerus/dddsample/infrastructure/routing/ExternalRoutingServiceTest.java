@@ -9,6 +9,8 @@ import se.citerus.dddsample.domain.model.cargo.*;
 import se.citerus.dddsample.domain.model.location.Location;
 import se.citerus.dddsample.domain.model.location.LocationRepository;
 import static se.citerus.dddsample.domain.model.location.SampleLocations.*;
+
+import se.citerus.dddsample.domain.model.location.UnLocode;
 import se.citerus.dddsample.domain.model.voyage.SampleVoyages;
 import se.citerus.dddsample.domain.model.voyage.VoyageNumber;
 import se.citerus.dddsample.domain.model.voyage.VoyageRepository;
@@ -46,7 +48,7 @@ public class ExternalRoutingServiceTest extends TestCase {
 
   public void testCalculatePossibleRoutes() {
     TrackingId trackingId = new TrackingId("ABC");
-    RouteSpecification routeSpecification = new RouteSpecification(HONGKONG, HELSINKI, new Date());
+    RouteSpecification routeSpecification = new RouteSpecification(HONGKONG.unLocode(), HELSINKI.unLocode(), new Date());
     Cargo cargo = new Cargo(trackingId, routeSpecification);
 
     expect(voyageRepository.find(isA(VoyageNumber.class))).andStubReturn(SampleVoyages.CM002);
@@ -65,7 +67,7 @@ public class ExternalRoutingServiceTest extends TestCase {
       assertEquals(cargo.origin(), legs.get(0).loadLocation());
 
       // Cargo final destination and last leg stop should match
-      Location lastLegStop = legs.get(legs.size() - 1).unloadLocation();
+      UnLocode lastLegStop = legs.get(legs.size() - 1).unloadLocation();
       assertEquals(cargo.routeSpecification().destination(), lastLegStop);
 
       for (int i = 0; i < legs.size() - 1; i++) {

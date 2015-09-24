@@ -38,8 +38,8 @@ public class ExternalRoutingService implements RoutingService {
     /*
       The RouteSpecification is picked apart and adapted to the external API.
      */
-    final Location origin = routeSpecification.origin();
-    final Location destination = routeSpecification.destination();
+    final UnLocode origin = routeSpecification.origin();
+    final UnLocode destination = routeSpecification.destination();
 
     final Properties limitations = new Properties();
     limitations.setProperty("DEADLINE", routeSpecification.arrivalDeadline().toString());
@@ -47,8 +47,8 @@ public class ExternalRoutingService implements RoutingService {
     final List<TransitPath> transitPaths;
     try {
       transitPaths = graphTraversalService.findShortestPath(
-      origin.unLocode().idString(),
-      destination.unLocode().idString(),
+      origin.idString(),
+      destination.idString(),
       limitations
     );
     } catch (RemoteException e) {
@@ -85,8 +85,8 @@ public class ExternalRoutingService implements RoutingService {
   private Leg toLeg(TransitEdge edge) {
     return new Leg(
       voyageRepository.find(new VoyageNumber(edge.getVoyageNumber())),
-      locationRepository.find(new UnLocode(edge.getFromUnLocode())),
-      locationRepository.find(new UnLocode(edge.getToUnLocode())),
+      new UnLocode(edge.getFromUnLocode()),
+      new UnLocode(edge.getToUnLocode()),
       edge.getFromDate(), edge.getToDate()
     );
   }

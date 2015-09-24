@@ -27,15 +27,15 @@ public class RouteSpecificationTest extends TestCase {
   // it shouldn't be possible to create Legs that have load/unload locations
   // and/or dates that don't match the voyage's carrier movements.
   final Itinerary itinerary = new Itinerary(Arrays.asList(
-      new Leg(hongKongTokyoNewYork, HONGKONG, NEWYORK,
+      new Leg(hongKongTokyoNewYork, HONGKONG.unLocode(), NEWYORK.unLocode(),
               toDate("2009-02-01"), toDate("2009-02-10")),
-      new Leg(dallasNewYorkChicago, NEWYORK, CHICAGO,
+      new Leg(dallasNewYorkChicago, NEWYORK.unLocode(), CHICAGO.unLocode(),
               toDate("2009-02-12"), toDate("2009-02-20")))
   );
 
   public void testIsSatisfiedBy_Success() {
     RouteSpecification routeSpecification = new RouteSpecification(
-      HONGKONG, CHICAGO, toDate("2009-03-01")
+      HONGKONG.unLocode(), CHICAGO.unLocode(), toDate("2009-03-01")
     );
 
     assertTrue(routeSpecification.isSatisfiedBy(itinerary));
@@ -43,7 +43,7 @@ public class RouteSpecificationTest extends TestCase {
 
   public void testIsSatisfiedBy_WrongOrigin() {
     RouteSpecification routeSpecification = new RouteSpecification(
-      HANGZOU, CHICAGO, toDate("2009-03-01")
+      HANGZOU.unLocode(), CHICAGO.unLocode(), toDate("2009-03-01")
     );
 
     assertFalse(routeSpecification.isSatisfiedBy(itinerary));
@@ -51,7 +51,7 @@ public class RouteSpecificationTest extends TestCase {
 
   public void testIsSatisfiedBy_WrongDestination() {
     RouteSpecification routeSpecification = new RouteSpecification(
-      HONGKONG, DALLAS, toDate("2009-03-01")
+      HONGKONG.unLocode(), DALLAS.unLocode(), toDate("2009-03-01")
     );
 
     assertFalse(routeSpecification.isSatisfiedBy(itinerary));
@@ -59,7 +59,7 @@ public class RouteSpecificationTest extends TestCase {
 
   public void testIsSatisfiedBy_MissedDeadline() {
     RouteSpecification routeSpecification = new RouteSpecification(
-      HONGKONG, CHICAGO, toDate("2009-02-15")
+      HONGKONG.unLocode(), CHICAGO.unLocode(), toDate("2009-02-15")
     );
 
     assertFalse(routeSpecification.isSatisfiedBy(itinerary));

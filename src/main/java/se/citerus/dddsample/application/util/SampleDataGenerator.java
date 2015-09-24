@@ -218,14 +218,14 @@ public class SampleDataGenerator implements ServletContextListener {
         session.save(HELSINKI_TO_HONGKONG);
         session.save(DALLAS_TO_HELSINKI_ALT);
 
-        RouteSpecification routeSpecification = new RouteSpecification(HONGKONG, HELSINKI, toDate("2009-03-15"));
+        RouteSpecification routeSpecification = new RouteSpecification(HONGKONG.unLocode(), HELSINKI.unLocode(), toDate("2009-03-15"));
         TrackingId trackingId = new TrackingId("ABC123");
         Cargo abc123 = new Cargo(trackingId, routeSpecification);
 
         Itinerary itinerary = new Itinerary(asList(
-          new Leg(HONGKONG_TO_NEW_YORK, HONGKONG, NEWYORK, toDate("2009-03-02"), toDate("2009-03-05")),
-          new Leg(NEW_YORK_TO_DALLAS, NEWYORK, DALLAS, toDate("2009-03-06"), toDate("2009-03-08")),
-          new Leg(DALLAS_TO_HELSINKI, DALLAS, HELSINKI, toDate("2009-03-09"), toDate("2009-03-12"))
+          new Leg(HONGKONG_TO_NEW_YORK, HONGKONG.unLocode(), NEWYORK.unLocode(), toDate("2009-03-02"), toDate("2009-03-05")),
+          new Leg(NEW_YORK_TO_DALLAS, NEWYORK.unLocode(), DALLAS.unLocode(), toDate("2009-03-06"), toDate("2009-03-08")),
+          new Leg(DALLAS_TO_HELSINKI, DALLAS.unLocode(), HELSINKI.unLocode(), toDate("2009-03-09"), toDate("2009-03-12"))
         ));
         abc123.assignToRoute(itinerary);
 
@@ -257,14 +257,14 @@ public class SampleDataGenerator implements ServletContextListener {
 
         // Cargo JKL567
 
-        RouteSpecification routeSpecification1 = new RouteSpecification(HANGZOU, STOCKHOLM, toDate("2009-03-18"));
+        RouteSpecification routeSpecification1 = new RouteSpecification(HANGZOU.unLocode(), STOCKHOLM.unLocode(), toDate("2009-03-18"));
         TrackingId trackingId1 = new TrackingId("JKL567");
         Cargo jkl567 = new Cargo(trackingId1, routeSpecification1);
 
         Itinerary itinerary1 = new Itinerary(asList(
-          new Leg(HONGKONG_TO_NEW_YORK, HANGZOU, NEWYORK, toDate("2009-03-03"), toDate("2009-03-05")),
-          new Leg(NEW_YORK_TO_DALLAS, NEWYORK, DALLAS, toDate("2009-03-06"), toDate("2009-03-08")),
-          new Leg(DALLAS_TO_HELSINKI, DALLAS, STOCKHOLM, toDate("2009-03-09"), toDate("2009-03-11"))
+          new Leg(HONGKONG_TO_NEW_YORK, HANGZOU.unLocode(), NEWYORK.unLocode(), toDate("2009-03-03"), toDate("2009-03-05")),
+          new Leg(NEW_YORK_TO_DALLAS, NEWYORK.unLocode(), DALLAS.unLocode(), toDate("2009-03-06"), toDate("2009-03-08")),
+          new Leg(DALLAS_TO_HELSINKI, DALLAS.unLocode(), STOCKHOLM.unLocode(), toDate("2009-03-09"), toDate("2009-03-11"))
         ));
         jkl567.assignToRoute(itinerary1);
 

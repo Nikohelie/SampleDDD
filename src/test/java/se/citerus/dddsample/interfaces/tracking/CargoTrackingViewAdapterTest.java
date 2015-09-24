@@ -16,13 +16,13 @@ import java.util.*;
 public class CargoTrackingViewAdapterTest extends TestCase {
 
   public void testCreate() {
-    Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(HANGZOU, HELSINKI, new Date()));
+    Cargo cargo = new Cargo(new TrackingId("XYZ"), new RouteSpecification(HANGZOU.unLocode(), HELSINKI.unLocode(), new Date()));
 
     List<HandlingEvent> events = new ArrayList<HandlingEvent>();
-    events.add(new HandlingEvent(cargo, new Date(1), new Date(2), HandlingEvent.Type.RECEIVE, HANGZOU));
+    events.add(new HandlingEvent(cargo, new Date(1), new Date(2), HandlingEvent.Type.RECEIVE, HANGZOU.unLocode()));
 
-    events.add(new HandlingEvent(cargo, new Date(3), new Date(4), HandlingEvent.Type.LOAD, HANGZOU, CM001));
-    events.add(new HandlingEvent(cargo, new Date(5), new Date(6), HandlingEvent.Type.UNLOAD, HELSINKI, CM001));
+    events.add(new HandlingEvent(cargo, new Date(3), new Date(4), HandlingEvent.Type.LOAD, HANGZOU.unLocode(), CM001));
+    events.add(new HandlingEvent(cargo, new Date(5), new Date(6), HandlingEvent.Type.UNLOAD, HELSINKI.unLocode(), CM001));
 
     cargo.deriveDeliveryProgress(new HandlingHistory(events));
 
